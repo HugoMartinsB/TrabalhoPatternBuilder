@@ -1,9 +1,7 @@
 package com.finan.orcamento.service;
 
 import com.finan.orcamento.model.Casa;
-import com.finan.orcamento.model.UsuarioModel;
 import com.finan.orcamento.repositories.CasaRepository;
-import com.finan.orcamento.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,29 +10,40 @@ import java.util.Optional;
 
 @Service
 public class CasaService {
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
-    public List<Casa> buscarUsuario(){
-        return CasaRepository.findAll();
+    @Autowired
+    private CasaRepository casaRepository;
+
+    public List<Casa> buscarTodasCasas() {
+        return casaRepository.findAll();
     }
 
-    public Casa buscaId(Long id){
-        Optional<Casa> obj=CasaRepository.findById(id);
+    public Casa buscarCasaPorId(Long id) {
+        Optional<Casa> obj = casaRepository.findById(id);
         if (obj.isPresent()) {
             return obj.get();
         } else {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RuntimeException("Casa não encontrada");
         }
     }
 
-    public UsuarioModel cadastrarUsuario(UsuarioModel usuarioModel){
-        return usuarioRepository.save(usuarioModel);
+    public Casa cadastrarCasa(Casa casa) {
+        return casaRepository.save(casa);
     }
 
+    public void deletarCasaPorId(Long id) {
+        casaRepository.deleteById(id);
+    }
 
-    public void deletaUsuario(Long id){
-        usuarioRepository.deleteById(id);
+    public Casa atualizarCasa(Casa casa, Long id) {
+
+        Optional<Casa> casaOptional = casaRepository.findById(id);
+        if (casaOptional.isPresent()) {
+            Casa casaToUpdate = casaOptional.get();
+            casaToUpdate.setQuartos(casa.getQuartos());
+            return casaRepository.save(casaToUpdate);
+        } else {
+            throw new RuntimeException("Casa não encontrada para atualização");
+        }
     }
 }
-
