@@ -9,3 +9,7 @@ class OrcamentoApplication
 fun main(args: Array<String>) {
 	runApplication<OrcamentoApplication>(*args)
 }
+
+fun <T> runApplication(args: Array<String>) {
+	TODO("Not yet implemented")
+}
